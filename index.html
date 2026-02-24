@@ -44,6 +44,7 @@
     transition: all 0.15s;
   }
   .tab:hover { background: rgba(245, 166, 35, 0.15); }
+  .tab:focus-visible { outline: 2px solid #f5a623; outline-offset: 2px; }
   .tab.active { background: #f5a623; color: #1a1a2e; }
   .list-section { display: none; }
   .list-section.active { display: block; }
@@ -55,28 +56,28 @@
   }
   .search-input {
     grid-column: 1 / -1;
-    padding: 0.4rem 0.6rem;
-    border: 1px solid #333;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid #4a5568;
+    border-radius: 6px;
+    background: #16213e;
+    color: #e0e0e0;
+    font-size: 0.85rem;
+    outline: none;
+  }
+  .search-input:focus { border-color: #f5a623; outline: 2px solid #f5a623; outline-offset: 1px; }
+  .search-input::placeholder { color: #7a8599; }
+  .control-select {
+    padding: 0.45rem 0.5rem;
+    border: 1px solid #4a5568;
     border-radius: 6px;
     background: #16213e;
     color: #e0e0e0;
     font-size: 0.8rem;
     outline: none;
-  }
-  .search-input:focus { border-color: #f5a623; }
-  .search-input::placeholder { color: #555; }
-  .control-select {
-    padding: 0.35rem 0.4rem;
-    border: 1px solid #333;
-    border-radius: 6px;
-    background: #16213e;
-    color: #e0e0e0;
-    font-size: 0.75rem;
-    outline: none;
     cursor: pointer;
     min-width: 0;
   }
-  .control-select:focus { border-color: #f5a623; }
+  .control-select:focus { border-color: #f5a623; outline: 2px solid #f5a623; outline-offset: 1px; }
   .progress-bar {
     text-align: center;
     margin-bottom: 0.4rem;
@@ -87,7 +88,7 @@
   .no-results {
     text-align: center;
     padding: 1.5rem;
-    color: #666;
+    color: #9a9fb0;
     font-style: italic;
     font-size: 0.85rem;
   }
@@ -116,8 +117,8 @@
   .beer-card.done .beer-name { text-decoration: line-through; }
   .beer-checkbox {
     flex-shrink: 0;
-    width: 18px;
-    height: 18px;
+    width: 26px;
+    height: 26px;
     accent-color: #f5a623;
     cursor: pointer;
   }
@@ -135,7 +136,7 @@
   }
   .beer-detail {
     font-size: 0.7rem;
-    color: #888;
+    color: #9a9fb0;
   }
   .beer-abv {
     font-size: 0.7rem;
@@ -148,55 +149,77 @@
     font-weight: 600;
   }
   .untappd-link {
-    font-size: 0.65rem;
-    color: #5a9ab8;
     text-decoration: none;
     margin-left: auto;
     flex-shrink: 0;
-    padding: 0.15rem 0.3rem;
-    border: 1px solid #2a4a60;
+    display: flex;
+    align-items: center;
     border-radius: 4px;
   }
-  .untappd-link:hover { border-color: #5a9ab8; }
+  .untappd-link img {
+    width: 26px;
+    height: 26px;
+    border-radius: 3px;
+  }
+  .untappd-link:focus-visible { outline: 2px solid #f5a623; outline-offset: 1px; }
+  .beer-checkbox:focus-visible { outline: 2px solid #f5a623; outline-offset: 2px; }
   .no-rating {
     font-size: 0.65rem;
-    color: #555;
+    color: #7a8599;
   }
   .clear-btn {
-    padding: 0.35rem 0.4rem;
-    border: 1px solid #444;
+    padding: 0.45rem 0.5rem;
+    border: 1px solid #4a5568;
     border-radius: 6px;
     background: transparent;
-    color: #888;
-    font-size: 0.75rem;
+    color: #9a9fb0;
+    font-size: 0.8rem;
     cursor: pointer;
     text-align: center;
   }
+  .clear-btn:focus-visible { outline: 2px solid #f5a623; outline-offset: 1px; }
   .clear-btn:not(:disabled) { color: #fff; border-color: #666; }
   .clear-btn:hover:not(:disabled) { border-color: #999; }
-  .clear-btn:disabled { opacity: 0.3; cursor: default; }
+  .clear-btn:disabled { opacity: 0.4; cursor: default; }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
 </style>
 </head>
 <body>
 
 <h1>Tikkaus 2026</h1>
 
-<div class="tabs">
-  <button class="tab" data-list="friday">Friday</button>
-  <button class="tab" data-list="saturday-1">Saturday 1</button>
-  <button class="tab" data-list="saturday-2">Saturday 2</button>
-</div>
+<nav aria-label="Day selection">
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-list="friday" aria-selected="false">Friday</button>
+    <button class="tab" role="tab" data-list="saturday-1" aria-selected="false">Saturday 1</button>
+    <button class="tab" role="tab" data-list="saturday-2" aria-selected="false">Saturday 2</button>
+  </div>
+</nav>
 
-<div class="controls">
-  <input type="text" class="search-input" id="search" placeholder="Search beer or brewery...">
+<div class="controls" role="search" aria-label="Filter and sort beers">
+  <label for="search" class="sr-only">Search beers</label>
+  <input type="search" class="search-input" id="search" placeholder="Search beer or brewery...">
+  <label for="style-filter" class="sr-only">Filter by style</label>
   <select class="control-select" id="style-filter">
     <option value="">All styles</option>
   </select>
+  <label for="status-filter" class="sr-only">Filter by status</label>
   <select class="control-select" id="status-filter">
-    <option value="">All</option>
+    <option value="">All status</option>
     <option value="todo">To do</option>
     <option value="done">Done</option>
   </select>
+  <label for="sort-by" class="sr-only">Sort order</label>
   <select class="control-select" id="sort-by">
     <option value="default">Brewery order</option>
     <option value="rating-desc">Rating ↓</option>
@@ -205,10 +228,10 @@
     <option value="abv-asc">ABV ↑</option>
     <option value="name-asc">Name A-Z</option>
   </select>
-  <button class="clear-btn" id="clear-filters" disabled>Clear</button>
+  <button class="clear-btn" id="clear-filters" disabled>Clear filters</button>
 </div>
 
-<div id="app"></div>
+<main id="app" aria-live="polite"></main>
 
 <script>
 const BEER_DATA = {
@@ -504,7 +527,7 @@ function renderList(listKey) {
   const totalBeers = allBeers.length;
   const doneBeers = allBeers.filter(b => checked[b._id]).length;
 
-  let html = `<div class="progress-bar">Progress: <span>${doneBeers}</span> / <span>${totalBeers}</span></div>`;
+  let html = `<div class="progress-bar" role="status" aria-label="${doneBeers} of ${totalBeers} beers done">Progress: <span>${doneBeers}</span> / <span>${totalBeers}</span></div>`;
 
   if (filtered.length === 0) {
     html += `<div class="no-results">No beers match your filters</div>`;
@@ -523,26 +546,28 @@ function renderList(listKey) {
     }
     for (const brewery of orderedBreweries) {
       const group = filtered.filter(b => b.brewery === brewery);
-      html += `<div class="brewery-section">`;
-      html += `<div class="brewery-header">${brewery}</div>`;
+      html += `<section class="brewery-section" aria-label="${brewery}">`;
+      html += `<h2 class="brewery-header">${brewery}</h2>`;
+      html += `<div role="list">`;
       for (const beer of group) {
         html += renderBeerCard(beer, checked);
       }
-      html += `</div>`;
+      html += `</div></section>`;
     }
   } else {
     // Flat sorted list, still show brewery headers when brewery changes
     let lastBrewery = null;
-    html += `<div class="brewery-section">`;
+    html += `<section class="brewery-section">`;
     for (const beer of filtered) {
       if (beer.brewery !== lastBrewery) {
-        if (lastBrewery !== null) html += `</div><div class="brewery-section">`;
-        html += `<div class="brewery-header">${beer.brewery}</div>`;
+        if (lastBrewery !== null) html += `</div></section><section class="brewery-section" aria-label="${beer.brewery}">`;
+        html += `<h2 class="brewery-header">${beer.brewery}</h2>`;
+        html += `<div role="list">`;
         lastBrewery = beer.brewery;
       }
       html += renderBeerCard(beer, checked);
     }
-    html += `</div>`;
+    html += `</div></section>`;
   }
 
   return html;
@@ -552,20 +577,20 @@ function renderBeerCard(beer, checked) {
   const isDone = !!checked[beer._id];
   const untappdUrl = beer.untappd ? `https://untappd.com${beer.untappd}` : null;
   const ratingHtml = beer.rating
-    ? `<span class="beer-rating">★${beer.rating.toFixed(1)}</span>`
-    : `<span class="no-rating">—</span>`;
+    ? `<span class="beer-rating" aria-label="Rating ${beer.rating.toFixed(1)} out of 5">★${beer.rating.toFixed(1)}</span>`
+    : `<span class="no-rating" aria-label="No rating">—</span>`;
   return `
-    <div class="beer-card ${isDone ? 'done' : ''}" data-id="${beer._id}">
-      <input type="checkbox" class="beer-checkbox" ${isDone ? 'checked' : ''} data-id="${beer._id}">
+    <div class="beer-card ${isDone ? 'done' : ''}" data-id="${beer._id}" role="listitem">
+      <input type="checkbox" class="beer-checkbox" ${isDone ? 'checked' : ''} data-id="${beer._id}" aria-label="Mark ${beer.name} as done">
       <div class="beer-info">
         <div class="beer-row">
           <span class="beer-name">${beer.name}</span>
           <span class="beer-detail">${beer.style}</span>
-          <span class="beer-abv">${beer.abv}</span>
+          <span class="beer-abv" aria-label="${beer.abv} alcohol">${beer.abv}</span>
           ${ratingHtml}
         </div>
       </div>
-      ${untappdUrl ? `<a href="${untappdUrl}" target="_blank" rel="noopener" class="untappd-link">UT</a>` : ''}
+      ${untappdUrl ? `<a href="${untappdUrl}" target="_blank" rel="noopener" class="untappd-link" aria-label="${beer.name} on Untappd"><img src="image.png" alt="Untappd"></a>` : ''}
     </div>`;
 }
 
@@ -595,8 +620,12 @@ document.addEventListener('change', (e) => {
 
 document.querySelector('.tabs').addEventListener('click', (e) => {
   if (e.target.classList.contains('tab')) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
     e.target.classList.add('active');
+    e.target.setAttribute('aria-selected', 'true');
     saveUIState({ list: e.target.dataset.list });
     renderAll();
   }
@@ -644,7 +673,9 @@ document.getElementById('clear-filters').addEventListener('click', () => {
   // Restore active tab
   const listKey = ui.list || 'friday';
   document.querySelectorAll('.tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.list === listKey);
+    const isActive = t.dataset.list === listKey;
+    t.classList.toggle('active', isActive);
+    t.setAttribute('aria-selected', String(isActive));
   });
 
   // Restore filter controls

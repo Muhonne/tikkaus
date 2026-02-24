@@ -1,5 +1,5 @@
-const CACHE = 'tikkaus-v1';
-const ASSETS = ['./', 'index.html', 'manifest.json', 'icon.svg'];
+const CACHE = 'tikkaus-v2';
+const ASSETS = ['./', 'index.html', 'manifest.json', 'icon.svg', 'image.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)));
