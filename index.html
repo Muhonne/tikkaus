@@ -181,6 +181,45 @@
   .clear-btn:not(:disabled) { color: #fff; border-color: #666; }
   .clear-btn:hover:not(:disabled) { border-color: #999; }
   .clear-btn:disabled { opacity: 0.4; cursor: default; }
+  .win-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .win-overlay.show { display: flex; }
+  .win-modal {
+    background: #16213e;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    max-width: 90vw;
+  }
+  .win-modal img {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 8px;
+  }
+  .win-modal h2 {
+    color: #f5a623;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+  .win-modal button {
+    margin-top: 1rem;
+    padding: 0.5rem 1.5rem;
+    background: #f5a623;
+    color: #1a1a2e;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .win-modal button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
   .sr-only {
     position: absolute;
     width: 1px;
@@ -232,6 +271,15 @@
 </div>
 
 <main id="app" aria-live="polite"></main>
+
+<div class="win-overlay" id="win-overlay" role="dialog" aria-label="All beers completed">
+  <div class="win-modal">
+    <h2>Voitit pelin!</h2>
+    <img src="winners-win.gif" alt="Winners win!">
+    <br>
+    <button id="win-close">Close</button>
+  </div>
+</div>
 
 <script>
 const BEER_DATA = {
@@ -604,6 +652,26 @@ function renderAll() {
 }
 
 // --- Events ---
+function checkAllDone() {
+  const listKey = getActiveList();
+  const allBeers = flattenList(listKey);
+  if (allBeers.length === 0) return;
+  const checked = getChecked();
+  const allDone = allBeers.every(b => checked[b._id]);
+  if (allDone) {
+    document.getElementById('win-overlay').classList.add('show');
+  }
+}
+
+document.getElementById('win-close').addEventListener('click', () => {
+  document.getElementById('win-overlay').classList.remove('show');
+});
+document.getElementById('win-overlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) {
+    document.getElementById('win-overlay').classList.remove('show');
+  }
+});
+
 document.addEventListener('change', (e) => {
   if (e.target.classList.contains('beer-checkbox')) {
     const id = e.target.dataset.id;
@@ -615,6 +683,7 @@ document.addEventListener('change', (e) => {
     }
     saveChecked(checked);
     renderAll();
+    checkAllDone();
   }
 });
 
