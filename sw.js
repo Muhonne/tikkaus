@@ -1,4 +1,4 @@
-const CACHE = 'tikkaus-v3';
+const CACHE = 'tikkaus-v4';
 const ASSETS = ['./', 'index.html', 'manifest.json', 'icon.svg', 'image.png', 'winners-win.gif'];
 
 self.addEventListener('install', (e) => {
